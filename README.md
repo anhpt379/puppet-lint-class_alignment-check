@@ -2,6 +2,10 @@
 
 [![License](https://img.shields.io/github/license/anhpt379/puppet-lint-class_alignment-check.svg)](https://github.com/anhpt379/puppet-lint-class_alignment-check/blob/master/LICENSE)
 [![Test](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml/badge.svg)](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml)
+[![RubyGem Version](https://img.shields.io/gem/v/puppet-lint-class_alignment-check.svg)](https://rubygems.org/gems/puppet-lint-class_alignment-check)
+[![RubyGem Downloads](https://img.shields.io/gem/dt/puppet-lint-class_alignment-check.svg)](https://rubygems.org/gems/puppet-lint-class_alignment-check)
+
+A puppet-lint plugin to check and fix class params/equals alignment.
 
 ## Usage
 
