@@ -113,12 +113,12 @@ def check_for(character)
         arrow_column[level_idx] = this_arrow_column if arrow_column[level_idx] < this_arrow_column
 
         (level_tokens[level_idx] ||= []) << token
-      elsif token.prev_token.type == :LPAREN
+      elsif token == resource_tokens[0]
         level_idx += 1
         arrow_column << 0
         level_tokens[level_idx] ||= []
         param_column << nil
-      elsif token.next_token.type == :RPAREN
+      elsif token == resource_tokens[-1]
         if (level_tokens[level_idx] ||= []).map(&:line).uniq.length > 1
           level_tokens[level_idx].each do |arrow_tok|
             next if arrow_tok.column == arrow_column[level_idx] || level_tokens[level_idx].size == 1

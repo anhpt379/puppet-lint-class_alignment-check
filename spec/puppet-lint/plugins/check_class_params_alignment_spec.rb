@@ -280,7 +280,7 @@ describe 'class_params_alignment' do
         <<-END
           class name (
             $aaa = function('foo', 'bar'),
-            $bbb = function('foo', 'bar'),
+              $bbb = function('foo', 'bar'),
             Boolean $key1 = false,
             Enum['never', 'allow', 'try', 'demand'] $key2,
           $materializer_version = $foo ? {
@@ -308,7 +308,7 @@ describe 'class_params_alignment' do
 
       it 'should fix 4 problems' do
         expect(problems).to contain_fixed(format(msg, 53, 13)).on_line(2).in_column(13)
-        expect(problems).to contain_fixed(format(msg, 53, 13)).on_line(3).in_column(13)
+        expect(problems).to contain_fixed(format(msg, 53, 15)).on_line(3).in_column(15)
         expect(problems).to contain_fixed(format(msg, 53, 21)).on_line(4).in_column(21)
         expect(problems).to contain_fixed(format(msg, 53, 11)).on_line(6).in_column(11)
       end
