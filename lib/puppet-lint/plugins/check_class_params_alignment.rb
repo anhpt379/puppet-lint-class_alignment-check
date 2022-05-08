@@ -88,6 +88,7 @@ def check_for(character)
     resource_tokens.each do |token|
       if the_one?(token, character)
         param_token = get_prev_code_token(token, character)
+        param_token = token if param_token.nil?
 
         param_length = param_token.to_manifest.length
 
