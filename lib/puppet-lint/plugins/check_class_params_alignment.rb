@@ -39,6 +39,18 @@ def the_one?(token, character)
   end
 end
 
+def get_the_first_param(token)
+  while token&.prev_code_token
+    token = token.prev_code_token
+    break if token.type == :CLASS
+  end
+
+  while token&.next_code_token
+    token = token.next_code_token
+    return token if token.type == :VARIABLE
+  end
+end
+
 def get_prev_code_token(token, character)
   case character
   when '='
@@ -50,12 +62,7 @@ def get_prev_code_token(token, character)
       elsif token.prev_code_token.type == :LPAREN
         token
       elsif token.prev_code_token.type == :COMMA
-        origin = token
-        while token.prev_code_token
-          token = token.prev_code_token
-          return token if token.prev_code_token.type == :LPAREN
-        end
-        origin
+        get_the_first_param(token)
       end
     end
   end
