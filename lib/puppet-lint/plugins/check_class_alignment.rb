@@ -4,16 +4,16 @@
 # https://puppet.com/docs/puppet/7/style_guide.html#style_guide_classes-param-indentation-alignment
 
 def a_param?(token)
-  if token.prev_code_token.type == :EQUALS
+  if token&.prev_code_token&.type == :EQUALS
     false
-  elsif token.prev_code_token.type == :FARROW
+  elsif token&.prev_code_token&.type == :FARROW
     false
-  elsif token.type == :VARIABLE && !%i[DQPRE DQMID].include?(token.prev_code_token.type)
+  elsif token&.type == :VARIABLE && !%i[DQPRE DQMID].include?(token.prev_code_token.type)
     true
   end
 end
 
-def first_param_on_the_line?(token)
+def first_on_the_line?(token, type)
   origin = token
   while token&.prev_token
     token = token.prev_token
@@ -24,7 +24,7 @@ def first_param_on_the_line?(token)
   while token&.next_token
     token = token.next_token
 
-    break if token.type == :VARIABLE
+    break if token.type == type
   end
 
   origin == token
@@ -33,9 +33,9 @@ end
 def the_one?(token, character)
   case character
   when '='
-    true if token.type == :EQUALS
+    true if token.type == :EQUALS && first_on_the_line?(token, :EQUALS)
   when '$'
-    true if token.type == :VARIABLE && a_param?(token) && first_param_on_the_line?(token)
+    true if a_param?(token) && first_on_the_line?(token, :VARIABLE)
   end
 end
 
@@ -148,30 +148,14 @@ end
 # This function is copied & modified from puppet-lint arrow_alignment fix
 # https://github.com/puppetlabs/puppet-lint/blob/020143b705b023946739eb44e7c7d99fcd087527/lib/puppet-lint/plugins/check_whitespace/arrow_alignment.rb#L94
 def fix_for(problem)
-  if problem[:newline]
-    index = tokens.index(problem[:token].prev_code_token.prev_token)
+  raise PuppetLint::NoFix if problem[:newline]
 
-    # insert newline
-    tokens.insert(index, PuppetLint::Lexer::Token.new(:NEWLINE, "\n", 0, 0))
-
-    # indent the parameter to the correct depth
-    problem[:token].prev_code_token.prev_token.type = :INDENT
-    problem[:token].prev_code_token.prev_token.value = ' ' * problem[:newline_indent]
-
-    end_param_idx = tokens.index(problem[:token].prev_code_token)
-    start_param_idx = tokens.index(problem[:token].prev_token_of(%i[INDENT NEWLINE]))
-    param_length = tokens[start_param_idx..end_param_idx].map do |r|
-                     r.to_manifest.length
-                   end.reduce(0) { |sum, x| sum + x } + 1
-    new_ws_len = problem[:arrow_column] - param_length
-  else
-    new_ws_len = if problem[:token].prev_token.type == :WHITESPACE
-                   problem[:token].prev_token.to_manifest.length
-                 else
-                   0
-                 end
-    new_ws_len += (problem[:arrow_column] - problem[:token].column)
-  end
+  new_ws_len = if problem[:token].prev_token.type == :WHITESPACE
+                 problem[:token].prev_token.to_manifest.length
+               else
+                 0
+               end
+  new_ws_len += (problem[:arrow_column] - problem[:token].column)
 
   if new_ws_len.negative?
     raise PuppetLint::NoFix if problem[:token].prev_token.type != :INDENT

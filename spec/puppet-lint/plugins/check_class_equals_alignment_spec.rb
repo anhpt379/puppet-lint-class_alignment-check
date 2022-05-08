@@ -241,13 +241,12 @@ describe 'class_equals_alignment' do
         END
       end
 
-      it 'should detect 2 problems' do
-        expect(problems).to have(2).problems
+      it 'should detect 1 problem' do
+        expect(problems).to have(1).problems
       end
 
-      it 'should create 2 warnings' do
+      it 'should create 1 warning' do
         expect(problems).to contain_warning(format(msg, 18, 16)).on_line(2).in_column(16)
-        expect(problems).to contain_warning(format(msg, 18, 29)).on_line(2).in_column(29)
       end
     end
   end
@@ -424,23 +423,21 @@ describe 'class_equals_alignment' do
       let(:fixed) do
         <<-END
           class test (
-            $a   = 'foo',
-            $bb  = 'bar',
+            $a   = 'foo', $bb = 'bar',
             $ccc = 'baz',
           ) {}
         END
       end
 
-      it 'should detect 2 problems' do
-        expect(problems).to have(2).problems
+      it 'should detect 1 problem' do
+        expect(problems).to have(1).problems
       end
 
-      it 'should fix 2 problems' do
+      it 'should fix 1 problem' do
         expect(problems).to contain_fixed(format(msg, 18, 16)).on_line(2).in_column(16)
-        expect(problems).to contain_fixed(format(msg, 18, 29)).on_line(2).in_column(29)
       end
 
-      it 'should move the extra param onto its own line and realign' do
+      it 'should not move the extra param onto its own line and realign' do
         expect(manifest).to eq(fixed)
       end
     end
@@ -458,24 +455,21 @@ describe 'class_equals_alignment' do
       let(:fixed) do
         <<-END
           class test (
-            $a     = 'foo',
-            $bbccc = 'bar',
-            $ccc   = 'baz',
+            $a   = 'foo', $bbccc = 'bar',
+            $ccc = 'baz',
           ) {}
         END
       end
 
-      it 'should detect 2 problems' do
-        expect(problems).to have(3).problems
+      it 'should detect 1 problem' do
+        expect(problems).to have(1).problems
       end
 
-      it 'should fix 2 problems' do
-        expect(problems).to contain_fixed(format(msg, 20, 16)).on_line(2).in_column(16)
-        expect(problems).to contain_fixed(format(msg, 20, 32)).on_line(2).in_column(32)
-        expect(problems).to contain_fixed(format(msg, 20, 18)).on_line(3).in_column(18)
+      it 'should fix 1 problem' do
+        expect(problems).to contain_fixed(format(msg, 18, 16)).on_line(2).in_column(16)
       end
 
-      it 'should move the extra param onto its own line and realign' do
+      it 'should not move the extra param onto its own line and realign' do
         expect(manifest).to eq(fixed)
       end
     end
