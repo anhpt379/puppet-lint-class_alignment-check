@@ -1,6 +1,6 @@
-# puppet-lint-class_params_alignment-check
+# puppet-lint-class_alignment-check
 
-[![test](https://github.com/anhpt379/puppet-lint-class_params_alignment-check/actions/workflows/test.yml/badge.svg)](https://github.com/anhpt379/puppet-lint-class_params_alignment-check/actions/workflows/test.yml)
+[![test](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml/badge.svg)](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml)
 
 ## Usage
 
