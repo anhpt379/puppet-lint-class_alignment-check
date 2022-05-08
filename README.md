@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/anhpt379/puppet-lint-class_alignment-check.svg)](https://github.com/anhpt379/puppet-lint-class_alignment-check/blob/master/LICENSE)
 [![Test](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml/badge.svg)](https://github.com/anhpt379/puppet-lint-class_alignment-check/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/anhpt379/puppet-lint-class_alignment-check/branch/master/graph/badge.svg?token=2DI8JYJ8AZ)](https://codecov.io/gh/anhpt379/puppet-lint-class_alignment-check)
 [![RubyGem Version](https://img.shields.io/gem/v/puppet-lint-class_alignment-check.svg)](https://rubygems.org/gems/puppet-lint-class_alignment-check)
 [![RubyGem Downloads](https://img.shields.io/gem/dt/puppet-lint-class_alignment-check.svg)](https://rubygems.org/gems/puppet-lint-class_alignment-check)
 
