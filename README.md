@@ -11,12 +11,25 @@ A puppet-lint plugin to check and fix class params/equals alignment.
 
 ## Usage
 
-This plugin provides 2 checks for puppet-lint:
+This plugin provides 3 checks for puppet-lint:
 
+- `class_params_newline`
 - `class_params_alignment`
 - `class_equals_alignment`
 
 It supports `--fix` flag.
+
+To properly reformat the code, run `puppet-lint --fix` like this:
+
+```bash
+$ puppet-lint --only-checks class_params_newline --fix .
+$ puppet-lint --only-checks class_params_alignment --fix .
+$ puppet-lint --only-checks class_equals_alignment --fix .
+
+# It's best to combine the above checks with `strict_indent` to fix all remaining issues
+$ puppet-lint --only-checks strict_indent --fix .
+
+```
 
 > Parameters to classes or defined types must be uniformly indented in two
 > spaces from the title. The equals sign should be aligned.
