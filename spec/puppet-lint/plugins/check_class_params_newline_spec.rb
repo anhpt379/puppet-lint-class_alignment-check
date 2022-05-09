@@ -103,6 +103,8 @@ describe 'class_params_newline' do
           class bbb ( $foo = 1, $bar = $a, ) {}
 
           class ccc ($foo = 1) {}
+
+          class ddd {}
         END
       end
 
@@ -129,6 +131,8 @@ describe 'class_params_newline' do
           ) {}
 
           class ccc ($foo = 1) {}
+
+          class ddd {}
         END
       end
 

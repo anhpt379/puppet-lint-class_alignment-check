@@ -10,6 +10,7 @@ PuppetLint.new_check(:class_params_newline) do
   def check
     (class_indexes + defined_type_indexes).each do |item|
       tokens = item[:param_tokens]
+      next if tokens.nil?
 
       first_param = tokens.index { |token| a_param?(token) }
       last_param = tokens.rindex { |token| a_param?(token) }
