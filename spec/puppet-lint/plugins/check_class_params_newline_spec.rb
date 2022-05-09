@@ -95,12 +95,16 @@ describe 'class_params_newline' do
       let(:code) do
         <<-END
           class foo ($foo = 1, $bar = $a) {}
+          class foo ($foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a) {}
 
           class bar ($foo = 1, $bar = $a,) {}
+          class bar ($foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a,) {}
 
           class aaa ( $foo = 1, $bar = $a,) {}
+          class aaa ( $foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a,) {}
 
           class bbb ( $foo = 1, $bar = $a, ) {}
+          class bbb ( $foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a, ) {}
 
           class ccc ($foo = 1) {}
 
@@ -112,32 +116,54 @@ describe 'class_params_newline' do
             $database_path = $aaa,) inherits sap_zabbix::params { }
           { }
 
-          class fff ($foo, $bar=[], $listen_ips = [$::ipaddress]) {}
+          class fff ($foo, $bar=[], $foo, $bar=[], $foo, $bar=[], $listen_ips = [$::ipaddress]) {}
 
           define ggg ($foo, $bar=[]) {}
 
-          define asdf ($prefix, $pattern, $expire, $port) { }
+          define long_ggg ($foo, $bar=[], $foo, $bar=[], $foo, $bar=[], $foo, $bar=[]) {}
+
+          define asdf ($prefix, $pattern, $expire, $port, $prefix, $pattern, $expire, $port) { }
         END
       end
 
       let(:fixed) do
         <<-END
+          class foo ($foo = 1, $bar = $a) {}
           class foo (
+            $foo = 1,
+            $bar = $a,
+            $foo = 1,
+            $bar = $a,
             $foo = 1,
             $bar = $a
           ) {}
 
+          class bar ($foo = 1, $bar = $a,) {}
           class bar (
             $foo = 1,
             $bar = $a,
-          ) {}
-
-          class aaa (
+            $foo = 1,
+            $bar = $a,
             $foo = 1,
             $bar = $a,
           ) {}
 
+          class aaa ( $foo = 1, $bar = $a,) {}
+          class aaa (
+            $foo = 1,
+            $bar = $a,
+            $foo = 1,
+            $bar = $a,
+            $foo = 1,
+            $bar = $a,
+          ) {}
+
+          class bbb ( $foo = 1, $bar = $a, ) {}
           class bbb (
+            $foo = 1,
+            $bar = $a,
+            $foo = 1,
+            $bar = $a,
             $foo = 1,
             $bar = $a,
           ) {}
@@ -156,15 +182,31 @@ describe 'class_params_newline' do
           class fff (
             $foo,
             $bar=[],
+            $foo,
+            $bar=[],
+            $foo,
+            $bar=[],
             $listen_ips = [$::ipaddress]
           ) {}
 
-          define ggg (
+          define ggg ($foo, $bar=[]) {}
+
+          define long_ggg (
+            $foo,
+            $bar=[],
+            $foo,
+            $bar=[],
+            $foo,
+            $bar=[],
             $foo,
             $bar=[]
           ) {}
 
           define asdf (
+            $prefix,
+            $pattern,
+            $expire,
+            $port,
             $prefix,
             $pattern,
             $expire,

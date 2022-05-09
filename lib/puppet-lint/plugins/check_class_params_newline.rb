@@ -12,13 +12,12 @@ PuppetLint.new_check(:class_params_newline) do
       tokens = item[:param_tokens]
       next if tokens.nil?
 
-      first_param = tokens.index { |token| a_param?(token) }
-      last_param = tokens.rindex { |token| a_param?(token) }
-      next if first_param.nil?
-      next if last_param.nil?
-
-      # Skip if there's only 1 param
-      next if tokens[first_param] == tokens[last_param]
+      # Skip if line length < 80 chars
+      first_paren = tokens[0]&.prev_token_of(:LPAREN)
+      last_paren = tokens[-1]&.next_token_of(:RPAREN)
+      next if first_paren.nil?
+      next if last_paren.nil?
+      next if first_paren.line == last_paren.line && last_paren.column < 80
 
       tokens.each do |token|
         if token == tokens[-1]
