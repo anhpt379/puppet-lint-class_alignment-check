@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name        = 'puppet-lint-class_alignment-check'
-  spec.version     = '0.3.2'
+  spec.version     = '0.3.3'
   spec.homepage    = 'https://github.com/anhpt379/puppet-lint-class_alignment-check'
   spec.license     = 'MIT'
   spec.author      = 'Anh Pham'
