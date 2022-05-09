@@ -106,11 +106,15 @@ describe 'class_params_newline' do
 
           class ddd {}
 
-          class bar(
+          class eee (
             $foo = 1,
             $workers = max($::processorcount, 1),
             $database_path = $aaa,) inherits sap_zabbix::params { }
           { }
+
+          class fff ($foo, $bar=[]) {}
+
+          define ggg ($foo, $bar=[]) {}
         END
       end
 
@@ -140,12 +144,22 @@ describe 'class_params_newline' do
 
           class ddd {}
 
-          class bar(
+          class eee (
             $foo = 1,
             $workers = max($::processorcount, 1),
             $database_path = $aaa,
           ) inherits sap_zabbix::params { }
           { }
+
+          class fff (
+            $foo,
+            $bar=[]
+          ) {}
+
+          define ggg (
+            $foo,
+            $bar=[]
+          ) {}
         END
       end
 
