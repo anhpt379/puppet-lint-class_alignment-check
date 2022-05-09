@@ -51,7 +51,6 @@ PuppetLint.new_check(:class_params_newline) do
           next
         end
 
-        # binding.break
         notify(
           :warning,
           message: "`#{token.to_manifest}` should be in a new line (expected in line #{token.line + 1}, but found it in line #{token.line})",
@@ -68,12 +67,13 @@ PuppetLint.new_check(:class_params_newline) do
   def fix(problem)
     token = problem[:token]
     if token.type == :VARIABLE
+      case token&.prev_code_token&.type
       # Integer $db_port
-      if token&.prev_code_token&.type == :TYPE
+      when :TYPE
         token = token.prev_code_token
 
       # Variant[Undef, Enum['UNSET'], Stdlib::Port] $db_port
-      elsif token&.prev_code_token&.type == :RBRACK
+      when :RBRACK
         count = 0
         while token&.prev_code_token
           token = token.prev_code_token
