@@ -11,18 +11,24 @@ def a_param?(token)
     return true if token&.prev_token_of(:DEFINE)&.next_token_of(:LPAREN)&.next_token_of(:VARIABLE) == token
 
     count = 0
+    saw_a_comma = false
     while token&.prev_token
       token = token.prev_token
-      return false if token.type == :EQUALS
+
+      saw_a_comma = true if token.type == :COMMA
+
+      return false if token.type == :EQUALS && count == 0 && saw_a_comma == false
 
       if %i[RPAREN RBRACK RBRACE].include?(token.type)
-        count += 1
-      elsif %i[LPAREN LBRACK LBRACE].include?(token.type)
         count -= 1
+      elsif %i[LPAREN LBRACK LBRACE].include?(token.type)
+        count += 1
       end
 
-      return true if count.zero? && token.type == :COMMA
+      break if %i[CLASS DEFINE].include?(token.type)
     end
+
+    true if count == 1
   end
 end
 
@@ -78,6 +84,39 @@ def get_prev_code_token(token, character)
         get_the_first_param(token)
       end
     end
+  end
+end
+
+def get_param_start_token(token)
+  return nil unless a_param?(token)
+
+  case token&.prev_code_token&.type
+
+  # Integer $db_port
+  when :TYPE
+    token.prev_code_token
+
+  when :CLASSREF
+    token.prev_code_token
+
+  # Variant[Undef, Enum['UNSET'], Stdlib::Port] $db_port
+  when :RBRACK
+    count = 0
+    while token&.prev_code_token
+      token = token.prev_code_token
+      case token.type
+      when :RBRACK
+        count += 1
+      when :LBRACK
+        count -= 1
+      end
+
+      break if count.zero?
+    end
+    token.prev_code_token
+
+  else
+    token
   end
 end
 

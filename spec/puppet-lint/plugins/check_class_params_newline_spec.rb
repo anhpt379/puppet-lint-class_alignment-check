@@ -101,7 +101,7 @@ describe 'class_params_newline' do
           class bar ($foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a,) {}
 
           class aaa ( $foo = 1, $bar = $a,) {}
-          class aaa ( $foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a,) {}
+          class aaa ( Integer $foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a,) {}
 
           class bbb ( $foo = 1, $bar = $a, ) {}
           class bbb ( $foo = 1, $bar = $a, $foo = 1, $bar = $a, $foo = 1, $bar = $a, ) {}
@@ -125,6 +125,15 @@ describe 'class_params_newline' do
           define asdf ($prefix, $pattern, $expire, $port, $prefix, $pattern, $expire, $port) { }
 
           define asdf ($prefix, $pattern, $expire, $port, $prefix, $pattern=$a and $b, $epe=-$foo, $port=!$foo) { }
+
+          class aaa (
+            $aaa = func('bbb', $ccc), $bar = $a, $foo = 1, $bar = $a,
+          ) {}
+
+          class name (
+            Boolean             $foo,
+            Optional[String[1]] $bar,
+          ) { }
         END
       end
 
@@ -152,7 +161,7 @@ describe 'class_params_newline' do
 
           class aaa ( $foo = 1, $bar = $a,) {}
           class aaa (
-            $foo = 1,
+            Integer $foo = 1,
             $bar = $a,
             $foo = 1,
             $bar = $a,
@@ -224,6 +233,18 @@ describe 'class_params_newline' do
             $pattern=$a and $b,
             $epe=-$foo,
             $port=!$foo
+          ) { }
+
+          class aaa (
+            $aaa = func('bbb', $ccc),
+            $bar = $a,
+            $foo = 1,
+            $bar = $a,
+          ) {}
+
+          class name (
+            Boolean             $foo,
+            Optional[String[1]] $bar,
           ) { }
         END
       end

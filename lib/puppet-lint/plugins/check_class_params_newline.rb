@@ -37,9 +37,9 @@ PuppetLint.new_check(:class_params_newline) do
 
         next unless a_param?(token)
 
-        if token.prev_code_token.type == :LPAREN
-          next if token.line != token.prev_code_token.line
-        elsif token.line != get_prev_param_token(token).line
+        if get_param_start_token(token)&.prev_code_token.type == :LPAREN
+          next if token.line != get_param_start_token(token).prev_code_token.line
+        elsif token.line != get_prev_param_token(token)&.line
           next
         end
 
@@ -58,29 +58,7 @@ PuppetLint.new_check(:class_params_newline) do
 
   def fix(problem)
     token = problem[:token]
-    if token.type == :VARIABLE
-      case token&.prev_code_token&.type
-      # Integer $db_port
-      when :TYPE
-        token = token.prev_code_token
-
-      # Variant[Undef, Enum['UNSET'], Stdlib::Port] $db_port
-      when :RBRACK
-        count = 0
-        while token&.prev_code_token
-          token = token.prev_code_token
-          case token.type
-          when :RBRACK
-            count += 1
-          when :LBRACK
-            count -= 1
-          end
-
-          break if count.zero?
-        end
-        token = token.prev_code_token
-      end
-    end
+    token = get_param_start_token(token) if token.type == :VARIABLE
 
     last_non_whitespace_token = token.prev_token
     while last_non_whitespace_token&.prev_token
