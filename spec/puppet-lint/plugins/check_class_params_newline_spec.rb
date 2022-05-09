@@ -123,6 +123,8 @@ describe 'class_params_newline' do
           define long_ggg ($foo, $bar=[], $foo, $bar=[], $foo, $bar=[], $foo, $bar=[]) {}
 
           define asdf ($prefix, $pattern, $expire, $port, $prefix, $pattern, $expire, $port) { }
+
+          define asdf ($prefix, $pattern, $expire, $port, $prefix, $pattern=$a and $b, $epe=-$foo, $port=!$foo) { }
         END
       end
 
@@ -211,6 +213,17 @@ describe 'class_params_newline' do
             $pattern,
             $expire,
             $port
+          ) { }
+
+          define asdf (
+            $prefix,
+            $pattern,
+            $expire,
+            $port,
+            $prefix,
+            $pattern=$a and $b,
+            $epe=-$foo,
+            $port=!$foo
           ) { }
         END
       end
