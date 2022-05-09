@@ -20,9 +20,37 @@ PuppetLint.new_check(:class_params_newline) do
       next if tokens[first_param] == tokens[last_param]
 
       tokens.each do |token|
+        if token == tokens[-1]
+          rparen = token
+          while rparen&.next_token
+            rparen = rparen.next_token
+            break if rparen.type == :RPAREN
+          end
+
+          last_code_token = token
+          while last_code_token&.prev_token
+            break unless %i[WHITESPACE INDENT NEWLINE].include?(last_code_token.type)
+
+            last_code_token = last_code_token.prev_token
+          end
+
+          next if rparen.line != last_code_token.line
+
+          notify(
+            :warning,
+            message: "`)` should be in a new line (expected in line #{token.line + 1}, but found it in line #{token.line})",
+            line: rparen.line,
+            column: rparen.column,
+            token: rparen,
+            newline: true,
+            newline_indent: item[:tokens][0].column - 1
+          )
+          break
+        end
+
         next unless a_param?(token)
 
-        if token.prev_code_token == :LPAREN
+        if token.prev_code_token.type == :LPAREN
           next if token.line != token.prev_code_token.line
         elsif token.line != prev_param_token(token).line
           next
@@ -30,7 +58,7 @@ PuppetLint.new_check(:class_params_newline) do
 
         notify(
           :warning,
-          message: "Parameter #{token.to_manifest} should have its own line (expected in line #{token.line + 1}, but found it in line #{token.line})",
+          message: "`#{token.to_manifest}` should be in a new line (expected in line #{token.line + 1}, but found it in line #{token.line})",
           line: token.line,
           column: token.column,
           token: token,
@@ -65,6 +93,13 @@ PuppetLint.new_check(:class_params_newline) do
     index = tokens.index(token.prev_code_token.next_token)
     tokens.insert(index, PuppetLint::Lexer::Token.new(:NEWLINE, "\n", 0, 0))
 
-    token.prev_token.value = ' ' * problem[:newline_indent] if %i[WHITESPACE INDENT].include?(token.prev_token.type)
+    # When there's no space at the beginning of the param
+    # e.g.  class foo($bar="aaa") {}
+    if token.prev_code_token.next_token == token
+      tokens.insert(index + 1, PuppetLint::Lexer::Token.new(:INDENT, ' ' * problem[:newline_indent], 0, 0))
+
+    elsif %i[WHITESPACE INDENT].include?(token.prev_token.type)
+      token.prev_token.value = ' ' * problem[:newline_indent]
+    end
   end
 end
