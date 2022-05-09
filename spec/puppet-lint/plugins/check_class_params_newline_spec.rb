@@ -115,6 +115,8 @@ describe 'class_params_newline' do
           class fff ($foo, $bar=[], $listen_ips = [$::ipaddress]) {}
 
           define ggg ($foo, $bar=[]) {}
+
+          define asdf ($prefix, $pattern, $expire, $port) { }
         END
       end
 
@@ -161,6 +163,13 @@ describe 'class_params_newline' do
             $foo,
             $bar=[]
           ) {}
+
+          define asdf (
+            $prefix,
+            $pattern,
+            $expire,
+            $port
+          ) { }
         END
       end
 
