@@ -1,11 +1,3 @@
-def prev_param_token(token)
-  while token&.prev_code_token
-    token = token.prev_code_token
-    break if a_param?(token)
-  end
-  token
-end
-
 PuppetLint.new_check(:class_params_newline) do
   def check
     (class_indexes + defined_type_indexes).each do |item|
@@ -47,7 +39,7 @@ PuppetLint.new_check(:class_params_newline) do
 
         if token.prev_code_token.type == :LPAREN
           next if token.line != token.prev_code_token.line
-        elsif token.line != prev_param_token(token).line
+        elsif token.line != get_prev_param_token(token).line
           next
         end
 
