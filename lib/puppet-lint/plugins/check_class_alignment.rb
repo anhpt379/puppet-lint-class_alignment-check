@@ -11,11 +11,18 @@ def a_param?(token)
   elsif %i[DQPRE DQMID].include?(token&.prev_code_token&.type)
     false
   elsif token&.type == :VARIABLE
-    if token&.prev_token_of(:CLASS)&.next_token_of(:LPAREN) == token&.prev_token_of(:LPAREN)
-      true
-    elsif token&.prev_token_of(:DEFINE)&.next_token_of(:LPAREN) == token&.prev_token_of(:LPAREN)
-      true
+    count = 0
+    while token&.prev_token
+      token = token.prev_token
+      if %i[LPAREN LBRACK LBRACE].include?(token.type)
+        count += 1
+      elsif %i[RPAREN RBRACK RBRACE].include?(token.type)
+        count -= 1
+      elsif %i[DEFINE CLASS].include?(token.type)
+        break
+      end
     end
+    true if count == 1
   end
 end
 

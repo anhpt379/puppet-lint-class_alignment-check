@@ -112,7 +112,7 @@ describe 'class_params_newline' do
             $database_path = $aaa,) inherits sap_zabbix::params { }
           { }
 
-          class fff ($foo, $bar=[]) {}
+          class fff ($foo, $bar=[], $listen_ips = [$::ipaddress]) {}
 
           define ggg ($foo, $bar=[]) {}
         END
@@ -153,7 +153,8 @@ describe 'class_params_newline' do
 
           class fff (
             $foo,
-            $bar=[]
+            $bar=[],
+            $listen_ips = [$::ipaddress]
           ) {}
 
           define ggg (
