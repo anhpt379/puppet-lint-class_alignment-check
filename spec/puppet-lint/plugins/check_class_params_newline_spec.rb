@@ -105,6 +105,12 @@ describe 'class_params_newline' do
           class ccc ($foo = 1) {}
 
           class ddd {}
+
+          class bar(
+            $foo = 1,
+            $workers = max($::processorcount, 1),
+            $database_path = $aaa,) inherits sap_zabbix::params { }
+          { }
         END
       end
 
@@ -133,6 +139,13 @@ describe 'class_params_newline' do
           class ccc ($foo = 1) {}
 
           class ddd {}
+
+          class bar(
+            $foo = 1,
+            $workers = max($::processorcount, 1),
+            $database_path = $aaa,
+          ) inherits sap_zabbix::params { }
+          { }
         END
       end
 

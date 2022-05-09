@@ -8,7 +8,9 @@ def a_param?(token)
     false
   elsif token&.prev_code_token&.type == :FARROW
     false
-  elsif token&.type == :VARIABLE && !%i[DQPRE DQMID].include?(token.prev_code_token.type)
+  elsif %i[DQPRE DQMID].include?(token&.prev_code_token&.type)
+    false
+  elsif token&.type == :VARIABLE && token&.prev_token_of(:CLASS)&.next_token_of(:LPAREN) == token&.prev_token_of(:LPAREN)
     true
   end
 end
