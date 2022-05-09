@@ -22,11 +22,7 @@ PuppetLint.new_check(:class_params_newline) do
 
       tokens.each do |token|
         if token == tokens[-1]
-          rparen = token
-          while rparen&.next_token
-            rparen = rparen.next_token
-            break if rparen.type == :RPAREN
-          end
+          rparen = token.next_token_of(:RPAREN)
 
           last_code_token = token
           while last_code_token&.prev_token
@@ -72,26 +68,37 @@ PuppetLint.new_check(:class_params_newline) do
 
   def fix(problem)
     token = problem[:token]
-    case token&.prev_code_token&.type
-    when :TYPE
-      token = token.prev_code_token
-    when :RBRACK
-      count = 0
-      while token&.prev_code_token
+    if token.type == :VARIABLE
+      # Integer $db_port
+      if token&.prev_code_token&.type == :TYPE
         token = token.prev_code_token
-        case token.type
-        when :RBRACK
-          count += 1
-        when :LBRACK
-          count -= 1
-        end
 
-        break if count.zero?
+      # Variant[Undef, Enum['UNSET'], Stdlib::Port] $db_port
+      elsif token&.prev_code_token&.type == :RBRACK
+        count = 0
+        while token&.prev_code_token
+          token = token.prev_code_token
+          case token.type
+          when :RBRACK
+            count += 1
+          when :LBRACK
+            count -= 1
+          end
+
+          break if count.zero?
+        end
+        token = token.prev_code_token
       end
-      token = token.prev_code_token
     end
 
-    index = tokens.index(token.prev_code_token.next_token)
+    last_non_whitespace_token = token.prev_token
+    while last_non_whitespace_token&.prev_token
+      break unless %i[WHITESPACE INDENT NEWLINE].include?(last_non_whitespace_token.type)
+
+      last_non_whitespace_token = last_non_whitespace_token.prev_token
+    end
+
+    index = tokens.index(last_non_whitespace_token) + 1
     tokens.insert(index, PuppetLint::Lexer::Token.new(:NEWLINE, "\n", 0, 0))
 
     # When there's no space at the beginning of the param
