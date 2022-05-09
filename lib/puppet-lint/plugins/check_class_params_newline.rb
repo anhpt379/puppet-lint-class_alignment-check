@@ -42,7 +42,6 @@ PuppetLint.new_check(:class_params_newline) do
             newline: true,
             newline_indent: item[:tokens][0].column - 1
           )
-          break
         end
 
         next unless a_param?(token)
@@ -53,6 +52,7 @@ PuppetLint.new_check(:class_params_newline) do
           next
         end
 
+        # binding.break
         notify(
           :warning,
           message: "`#{token.to_manifest}` should be in a new line (expected in line #{token.line + 1}, but found it in line #{token.line})",
