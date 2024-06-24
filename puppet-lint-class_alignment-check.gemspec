@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
     A puppet-lint plugin to check & fix class params/equals alignment.
   DESC
 
-  spec.add_dependency             'puppet-lint', '>= 1.0', '< 3.0'
+  spec.add_dependency             'puppet-lint', '>= 1.0', '< 5.0'
   spec.add_development_dependency 'codecov'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
